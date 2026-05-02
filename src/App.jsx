@@ -490,4 +490,4 @@ export default function App() {
       </div>
     </>
   );
-} Coming soon ───────────────────────────
+} 
