@@ -4,7 +4,88 @@ import {
   Plus, Star, Trash2, Menu, X, Lock
 } from "lucide-react";
 
-const APP_PASSWORD = "grandmontoise2026";
+// Remplace APP_PASSWORD par ceci en haut du fichier :
+import { USERS } from "./users";
+
+// Nouvelle LoginScreen :
+function LoginScreen({ onLogin }) {
+  const [username, setUsername] = useState("");
+  const [pwd, setPwd] = useState("");
+  const [error, setError] = useState(false);
+  const [shake, setShake] = useState(false);
+
+  const submit = () => {
+    const user = USERS.find(
+      u => u.username === username.trim().toLowerCase() && u.password === pwd
+    );
+    if (user) {
+      // Charger les prefs sauvegardées dans localStorage, sinon celles du fichier
+      const savedPrefs = localStorage.getItem(`prefs_${user.username}`);
+      const prefs = savedPrefs ? JSON.parse(savedPrefs) : user.prefs;
+      onLogin({ ...user, prefs });
+    } else {
+      setError(true); setShake(true);
+      setTimeout(() => setShake(false), 400);
+    }
+  };
+
+  return (
+    <div style={{ minHeight:"100vh", background:BRAND.bg, display:"flex", alignItems:"center", justifyContent:"center", padding:24 }}>
+      <style>{CSS}</style>
+      <div className="fade-up" style={{ width:"100%", maxWidth:380, textAlign:"center" }}>
+        <div style={{ marginBottom:28 }}>
+          <div style={{ display:"inline-flex", marginBottom:18 }}><LogoMark size={56} /></div>
+          <h1 style={{ fontSize:22, fontWeight:700, color:BRAND.text, marginBottom:5 }}>La Grandmontoise</h1>
+          <p style={{ fontSize:14, color:BRAND.muted }}>Comité de programmation</p>
+        </div>
+
+        <div style={{ background:BRAND.surface, borderRadius:18, border:`1px solid ${BRAND.border}`, padding:"26px 22px" }}>
+          <div style={{ display:"flex", alignItems:"center", gap:7, marginBottom:18 }}>
+            <Lock size={13} color={BRAND.muted} />
+            <span style={{ fontSize:13, color:BRAND.muted, fontWeight:500 }}>Accès restreint</span>
+          </div>
+
+          <div className={shake ? "shake" : ""}>
+            <input
+              type="text"
+              placeholder="Nom d'utilisateur"
+              value={username}
+              onChange={e => { setUsername(e.target.value); setError(false); }}
+              onKeyDown={e => e.key === "Enter" && submit()}
+              style={{
+                width:"100%", padding:"12px 15px", borderRadius:10,
+                border:`1.5px solid ${error ? BRAND.red : BRAND.border2}`,
+                background:BRAND.surface2, color:BRAND.text, fontSize:15,
+                marginBottom:10, transition:"border-color 0.2s",
+              }}
+            />
+            <input
+              type="password"
+              placeholder="Mot de passe"
+              value={pwd}
+              onChange={e => { setPwd(e.target.value); setError(false); }}
+              onKeyDown={e => e.key === "Enter" && submit()}
+              style={{
+                width:"100%", padding:"12px 15px", borderRadius:10,
+                border:`1.5px solid ${error ? BRAND.red : BRAND.border2}`,
+                background:BRAND.surface2, color:BRAND.text, fontSize:15,
+                marginBottom: error ? 8 : 13, transition:"border-color 0.2s",
+              }}
+            />
+            {error && <p style={{ color:BRAND.red, fontSize:13, textAlign:"left", marginBottom:13 }}>Nom d'utilisateur ou mot de passe incorrect</p>}
+          </div>
+
+          <button className="btn-primary" onClick={submit} style={{
+            width:"100%", padding:"12px", borderRadius:10, border:"none",
+            background:BRAND.teal, color:"#fff", fontSize:15, fontWeight:600, cursor:"pointer",
+          }}>
+            Connexion
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 const BRAND = {
   teal: "#1a6b82",
