@@ -439,4 +439,55 @@ function Membres() {
   );
 }
 
-// ─── Coming soon ───────────────────────────
+// ───// ─── Coming Soon ──────────────────────────────────────────────────────────────
+function ComingSoon({ titre }) {
+  return (
+    <div className="fade-up" style={{ textAlign:"center", padding:"60px 20px" }}>
+      <div style={{
+        width:56, height:56, borderRadius:14,
+        background:`${BRAND.teal}1a`, border:`1px solid ${BRAND.teal}30`,
+        display:"flex", alignItems:"center", justifyContent:"center",
+        margin:"0 auto 18px",
+      }}>
+        <Star size={22} color={BRAND.teal} strokeWidth={1.8} />
+      </div>
+      <h2 style={{ fontSize:18, fontWeight:700, color:BRAND.text, marginBottom:8 }}>{titre}</h2>
+      <p style={{ fontSize:14, color:BRAND.muted }}>Cette section est en cours de développement.</p>
+    </div>
+  );
+}
+
+// ─── App ──────────────────────────────────────────────────────────────────────
+export default function App() {
+  const [auth, setAuth] = useState(false);
+  const [active, setActive] = useState("accueil");
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [notes, setNotes] = useState([]);
+
+  if (!auth) return <LoginScreen onLogin={() => setAuth(true)} />;
+
+  const renderPage = () => {
+    switch (active) {
+      case "accueil":    return <Accueil setActive={setActive} notes={notes} setNotes={setNotes} />;
+      case "evenements": return <Evenements />;
+      case "membres":    return <Membres />;
+      case "calendrier": return <ComingSoon titre="Calendrier" />;
+      case "courriels":  return <ComingSoon titre="Courriels" />;
+      case "disque":     return <ComingSoon titre="Disque partagé" />;
+      case "ressources": return <ComingSoon titre="Ressources" />;
+      default:           return <Accueil setActive={setActive} notes={notes} setNotes={setNotes} />;
+    }
+  };
+
+  return (
+    <>
+      <style>{CSS}</style>
+      <Nav active={active} setActive={setActive} menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
+      <div style={{ paddingTop:56, minHeight:"100vh", background:BRAND.bg }}>
+        <div style={{ maxWidth:860, margin:"0 auto", padding:"28px 16px" }}>
+          {renderPage()}
+        </div>
+      </div>
+    </>
+  );
+} Coming soon ───────────────────────────
