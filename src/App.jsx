@@ -435,3 +435,176 @@ function Evenements() {
   return (
     <div className="fade-up">
       <h2 style={{ fontSize:20, fontW
+// ─── Membres ──────────────────────────────────────────────────────────────────
+function Membres() {
+  return (
+    <div className="fade-up">
+      <h2 style={{ fontSize:20, fontWeight:700, color:BRAND.text, marginBottom:5 }}>Membres</h2>
+      <p style={{ fontSize:14, color:BRAND.muted, marginBottom:20 }}>Coordonnées du comité</p>
+      <div style={{ display:"flex", flexDirection:"column", gap:8 }}>
+        {MEMBRES_DATA.map(m => (
+          <div key={m.nom} style={{
+            background:BRAND.surface, borderRadius:13,
+            border:`1px solid ${BRAND.border}`,
+            padding:"14px 17px",
+            display:"flex", alignItems:"center", gap:13,
+          }}>
+            <div style={{
+              width:40, height:40, borderRadius:10, flexShrink:0,
+              background:`${BRAND.teal}1a`, border:`1px solid ${BRAND.teal}30`,
+              display:"flex", alignItems:"center", justifyContent:"center",
+            }}>
+              <Users size={17} color={BRAND.teal} strokeWidth={1.8} />
+            </div>
+            <div>
+              <div style={{ color:BRAND.text, fontWeight:600, fontSize:15 }}>{m.nom}</div>
+              <div style={{ color:BRAND.muted, fontSize:13 }}>{m.role}</div>
+              <div style={{ color:BRAND.tealLight, fontSize:13, marginTop:2 }}>{m.email}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ─── Préférences ──────────────────────────────────────────────────────────────
+function Preferences({ user, setUser }) {
+  const [prefs, setPrefs] = useState(user.prefs);
+  const [saved, setSaved] = useState(false);
+
+  const toggle = (key) => {
+    setPrefs(p => ({ ...p, [key]: !p[key] }));
+    setSaved(false);
+  };
+
+  const save = () => {
+    localStorage.setItem(`prefs_${user.username}`, JSON.stringify(prefs));
+    setUser({ ...user, prefs });
+    setSaved(true);
+    setTimeout(() => setSaved(false), 2500);
+  };
+
+  const OPTIONS = [
+    { key: "notifCalendrier", label: "Nouvel événement au calendrier", desc: "Recevoir un courriel quand un événement est ajouté" },
+    { key: "notifEvenement",  label: "Mise à jour d'un événement",     desc: "Recevoir un courriel si un événement est modifié ou annulé" },
+    { key: "notifMembres",    label: "Nouveau membre",                  desc: "Recevoir un courriel lors d'un ajout au comité" },
+  ];
+
+  return (
+    <div className="fade-up">
+      <h2 style={{ fontSize:20, fontWeight:700, color:BRAND.text, marginBottom:5 }}>Préférences</h2>
+      <p style={{ fontSize:14, color:BRAND.muted, marginBottom:22 }}>
+        {user.nom} · {user.email}
+        {user.role === "admin" && (
+          <span style={{
+            marginLeft:10, padding:"2px 9px", borderRadius:20,
+            background:`${BRAND.teal}22`, border:`1px solid ${BRAND.teal}40`,
+            color:BRAND.tealLight, fontSize:12, fontWeight:600,
+          }}>Admin</span>
+        )}
+      </p>
+
+      <div style={{ background:BRAND.surface, borderRadius:16, border:`1px solid ${BRAND.border}`, padding:20, marginBottom:16 }}>
+        <h3 style={{ fontSize:14, fontWeight:700, color:BRAND.text, marginBottom:16 }}>Notifications par courriel</h3>
+        <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
+          {OPTIONS.map(({ key, label, desc }) => (
+            <div key={key} className="pref-row" onClick={() => toggle(key)} style={{
+              display:"flex", justifyContent:"space-between", alignItems:"center",
+              padding:"13px 15px", borderRadius:12, cursor:"pointer",
+              background: prefs[key] ? `${BRAND.teal}12` : BRAND.surface2,
+              border:`1px solid ${prefs[key] ? BRAND.teal + "40" : BRAND.border}`,
+            }}>
+              <div>
+                <div style={{ color:BRAND.text, fontSize:14, fontWeight:500, marginBottom:2 }}>{label}</div>
+                <div style={{ color:BRAND.muted, fontSize:12 }}>{desc}</div>
+              </div>
+              <div style={{
+                width:42, height:24, borderRadius:12, flexShrink:0, marginLeft:14,
+                background: prefs[key] ? BRAND.teal : BRAND.border2,
+                position:"relative", transition:"background 0.2s",
+              }}>
+                <div style={{
+                  position:"absolute", top:3,
+                  left: prefs[key] ? 20 : 3,
+                  width:18, height:18, borderRadius:"50%",
+                  background:"#fff", transition:"left 0.2s",
+                }} />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <button className="btn-primary" onClick={save} style={{
+        padding:"11px 24px", borderRadius:10, border:"none",
+        background: saved ? "#2eb87e" : BRAND.teal,
+        color:"#fff", fontSize:14, fontWeight:600, cursor:"pointer",
+        transition:"background 0.3s",
+      }}>
+        {saved ? "✓ Sauvegardé" : "Sauvegarder"}
+      </button>
+    </div>
+  );
+}
+
+// ─── Coming Soon ──────────────────────────────────────────────────────────────
+function ComingSoon({ titre }) {
+  return (
+    <div className="fade-up" style={{ textAlign:"center", padding:"60px 20px" }}>
+      <div style={{
+        width:56, height:56, borderRadius:14,
+        background:`${BRAND.teal}1a`, border:`1px solid ${BRAND.teal}30`,
+        display:"flex", alignItems:"center", justifyContent:"center",
+        margin:"0 auto 18px",
+      }}>
+        <Star size={22} color={BRAND.teal} strokeWidth={1.8} />
+      </div>
+      <h2 style={{ fontSize:18, fontWeight:700, color:BRAND.text, marginBottom:8 }}>{titre}</h2>
+      <p style={{ fontSize:14, color:BRAND.muted }}>Cette section est en cours de développement.</p>
+    </div>
+  );
+}
+
+// ─── App ──────────────────────────────────────────────────────────────────────
+export default function App() {
+  const [user, setUser]         = useState(null);
+  const [active, setActive]     = useState("accueil");
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [notes, setNotes]       = useState([]);
+
+  if (!user) return <LoginScreen onLogin={(u) => setUser(u)} />;
+
+  const renderPage = () => {
+    switch (active) {
+      case "accueil":     return <Accueil setActive={setActive} notes={notes} setNotes={setNotes} />;
+      case "evenements":  return <Evenements />;
+      case "membres":     return <Membres />;
+      case "preferences": return <Preferences user={user} setUser={setUser} />;
+      case "calendrier":  return <ComingSoon titre="Calendrier" />;
+      case "courriels":   return <ComingSoon titre="Courriels" />;
+      case "disque":      return <ComingSoon titre="Disque partagé" />;
+      case "ressources":  return <ComingSoon titre="Ressources" />;
+      default:            return <Accueil setActive={setActive} notes={notes} setNotes={setNotes} />;
+    }
+  };
+
+  return (
+    <>
+      <style>{CSS}</style>
+      <Nav
+        active={active}
+        setActive={setActive}
+        menuOpen={menuOpen}
+        setMenuOpen={setMenuOpen}
+        user={user}
+        onLogout={() => { setUser(null); setActive("accueil"); }}
+      />
+      <div style={{ paddingTop:56, minHeight:"100vh", background:BRAND.bg }}>
+        <div style={{ maxWidth:860, margin:"0 auto", padding:"28px 16px" }}>
+          {renderPage()}
+        </div>
+      </div>
+    </>
+  );
+                }
