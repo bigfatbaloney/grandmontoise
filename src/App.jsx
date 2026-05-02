@@ -3,7 +3,77 @@ import {
   Home, Mail, Calendar, Drama, FolderOpen, Users, BookOpen,
   Plus, Star, Trash2, Menu, X, Lock
 } from "lucide-react";
+function Preferences({ user, setUser }) {
+  const [prefs, setPrefs] = useState(user.prefs);
+  const [saved, setSaved] = useState(false);
 
+  const toggle = (key) => {
+    setPrefs(p => ({ ...p, [key]: !p[key] }));
+    setSaved(false);
+  };
+
+  const save = () => {
+    localStorage.setItem(`prefs_${user.username}`, JSON.stringify(prefs));
+    setUser({ ...user, prefs });
+    setSaved(true);
+    setTimeout(() => setSaved(false), 2500);
+  };
+
+  const OPTIONS = [
+    { key: "notifCalendrier", label: "Nouvel événement au calendrier",  desc: "Recevoir un courriel quand un événement est ajouté" },
+    { key: "notifEvenement",  label: "Mise à jour d'un événement",      desc: "Recevoir un courriel si un événement est modifié ou annulé" },
+    { key: "notifMembres",    label: "Nouveau membre",                   desc: "Recevoir un courriel lors d'un ajout au comité" },
+  ];
+
+  return (
+    <div className="fade-up">
+      <h2 style={{ fontSize:20, fontWeight:700, color:BRAND.text, marginBottom:5 }}>Préférences</h2>
+      <p style={{ fontSize:14, color:BRAND.muted, marginBottom:22 }}>Notifications pour {user.nom} · {user.email}</p>
+
+      <div style={{ background:BRAND.surface, borderRadius:16, border:`1px solid ${BRAND.border}`, padding:20, marginBottom:16 }}>
+        <h3 style={{ fontSize:14, fontWeight:700, color:BRAND.text, marginBottom:16 }}>Notifications par courriel</h3>
+        <div style={{ display:"flex", flexDirection:"column", gap:12 }}>
+          {OPTIONS.map(({ key, label, desc }) => (
+            <div key={key} onClick={() => toggle(key)} style={{
+              display:"flex", justifyContent:"space-between", alignItems:"center",
+              padding:"13px 15px", borderRadius:12,
+              background: prefs[key] ? `${BRAND.teal}12` : BRAND.surface2,
+              border:`1px solid ${prefs[key] ? BRAND.teal + "40" : BRAND.border}`,
+              cursor:"pointer", transition:"all 0.15s",
+            }}>
+              <div>
+                <div style={{ color:BRAND.text, fontSize:14, fontWeight:500, marginBottom:2 }}>{label}</div>
+                <div style={{ color:BRAND.muted, fontSize:12 }}>{desc}</div>
+              </div>
+              {/* Toggle */}
+              <div style={{
+                width:42, height:24, borderRadius:12, flexShrink:0, marginLeft:14,
+                background: prefs[key] ? BRAND.teal : BRAND.border2,
+                position:"relative", transition:"background 0.2s",
+              }}>
+                <div style={{
+                  position:"absolute", top:3,
+                  left: prefs[key] ? 20 : 3,
+                  width:18, height:18, borderRadius:"50%",
+                  background:"#fff", transition:"left 0.2s",
+                }} />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <button className="btn-primary" onClick={save} style={{
+        padding:"11px 22px", borderRadius:10, border:"none",
+        background: saved ? "#2eb87e" : BRAND.teal,
+        color:"#fff", fontSize:14, fontWeight:600, cursor:"pointer",
+        transition:"background 0.3s",
+      }}>
+        {saved ? "✓ Sauvegardé" : "Sauvegarder"}
+      </button>
+    </div>
+  );
+}
 // Remplace APP_PASSWORD par ceci en haut du fichier :
 import { USERS } from "./users";
 
