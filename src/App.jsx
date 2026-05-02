@@ -1,4 +1,4 @@
-            import { useState } from "react";
+import { useState } from "react";
 import {
   Home, Mail, Calendar, Drama, FolderOpen, Users, BookOpen,
   Plus, Star, Trash2, Menu, X, Lock, LogOut, Settings
@@ -21,22 +21,22 @@ const BRAND = {
 };
 
 const NAV_ITEMS = [
-  { id: "accueil",     label: "Accueil",     Icon: Home },
-  { id: "calendrier",  label: "Calendrier",  Icon: Calendar },
-  { id: "evenements",  label: "Événements",  Icon: Drama },
-  { id: "courriels",   label: "Courriels",   Icon: Mail },
-  { id: "disque",      label: "Disque",      Icon: FolderOpen },
-  { id: "membres",     label: "Membres",     Icon: Users },
-  { id: "ressources",  label: "Ressources",  Icon: BookOpen },
+  { id: "accueil",    label: "Accueil",    Icon: Home },
+  { id: "calendrier", label: "Calendrier", Icon: Calendar },
+  { id: "evenements", label: "Événements", Icon: Drama },
+  { id: "courriels",  label: "Courriels",  Icon: Mail },
+  { id: "disque",     label: "Disque",     Icon: FolderOpen },
+  { id: "membres",    label: "Membres",    Icon: Users },
+  { id: "ressources", label: "Ressources", Icon: BookOpen },
 ];
 
 const CARDS = [
-  { id: "calendrier", label: "Calendrier",     desc: "Événements & spectacles", Icon: Calendar,   color: BRAND.teal,   bg: "rgba(26,107,130,0.18)" },
-  { id: "evenements", label: "Événements",     desc: "Passés et à venir",       Icon: Drama,      color: BRAND.red,    bg: "rgba(214,48,48,0.14)" },
-  { id: "courriels",  label: "Courriels",      desc: "Consultation",            Icon: Mail,       color: "#4a90b8",    bg: "rgba(74,144,184,0.14)" },
-  { id: "disque",     label: "Disque partagé", desc: "Documents",               Icon: FolderOpen, color: "#2eb87e",    bg: "rgba(46,184,126,0.12)" },
-  { id: "membres",    label: "Membres",        desc: "Coordonnées",             Icon: Users,      color: "#c9873a",    bg: "rgba(201,135,58,0.14)" },
-  { id: "ressources", label: "Ressources",     desc: "Documents & outils",      Icon: BookOpen,   color: "#8b6fc9",    bg: "rgba(139,111,201,0.14)" },
+  { id: "calendrier", label: "Calendrier",     desc: "Événements & spectacles", Icon: Calendar,   color: "#1a6b82", bg: "rgba(26,107,130,0.18)" },
+  { id: "evenements", label: "Événements",     desc: "Passés et à venir",       Icon: Drama,      color: "#d63030", bg: "rgba(214,48,48,0.14)" },
+  { id: "courriels",  label: "Courriels",      desc: "Consultation",            Icon: Mail,       color: "#4a90b8", bg: "rgba(74,144,184,0.14)" },
+  { id: "disque",     label: "Disque partagé", desc: "Documents",               Icon: FolderOpen, color: "#2eb87e", bg: "rgba(46,184,126,0.12)" },
+  { id: "membres",    label: "Membres",        desc: "Coordonnées",             Icon: Users,      color: "#c9873a", bg: "rgba(201,135,58,0.14)" },
+  { id: "ressources", label: "Ressources",     desc: "Documents & outils",      Icon: BookOpen,   color: "#8b6fc9", bg: "rgba(139,111,201,0.14)" },
 ];
 
 const EVENEMENTS_DATA = [
@@ -56,11 +56,11 @@ const MEMBRES_DATA = [
 const CSS = `
   @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap');
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: ${BRAND.bg}; font-family: 'DM Sans', sans-serif; }
+  body { background: #0c1015; font-family: 'DM Sans', sans-serif; }
   button, input, textarea { font-family: 'DM Sans', sans-serif; }
   ::-webkit-scrollbar { width: 5px; }
-  ::-webkit-scrollbar-track { background: ${BRAND.bg}; }
-  ::-webkit-scrollbar-thumb { background: ${BRAND.border2}; border-radius: 3px; }
+  ::-webkit-scrollbar-track { background: #0c1015; }
+  ::-webkit-scrollbar-thumb { background: #243040; border-radius: 3px; }
 
   @keyframes fadeUp    { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
   @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
@@ -70,14 +70,14 @@ const CSS = `
   .shake    { animation: shake 0.38s ease; }
 
   .nav-btn { transition: background 0.15s, color 0.15s; }
-  .nav-btn:hover  { background: rgba(26,107,130,0.1) !important; color: ${BRAND.tealLight} !important; }
-  .nav-btn.active { background: rgba(26,107,130,0.18) !important; color: ${BRAND.tealLight} !important; }
+  .nav-btn:hover  { background: rgba(26,107,130,0.1) !important; color: #2a8ba6 !important; }
+  .nav-btn.active { background: rgba(26,107,130,0.18) !important; color: #2a8ba6 !important; }
 
   .card { transition: transform 0.18s, box-shadow 0.18s; }
   .card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.25); }
 
   .btn-primary { transition: background 0.15s; }
-  .btn-primary:hover  { background: ${BRAND.tealLight} !important; }
+  .btn-primary:hover  { background: #2a8ba6 !important; }
   .btn-primary:active { opacity: 0.9; }
 
   .btn-ghost { transition: background 0.15s; }
@@ -86,7 +86,7 @@ const CSS = `
   .pref-row { transition: background 0.15s, border-color 0.15s; }
   .pref-row:hover { filter: brightness(1.07); }
 
-  input:focus, textarea:focus { outline: none; border-color: ${BRAND.teal} !important; }
+  input:focus, textarea:focus { outline: none; border-color: #1a6b82 !important; }
 
   @media (min-width: 640px) { .mobile-only  { display: none !important; } }
   @media (max-width: 639px) { .desktop-only { display: none !important; } }
@@ -96,10 +96,10 @@ const CSS = `
 function LogoMark({ size = 30 }) {
   return (
     <svg width={size} height={size} viewBox="0 0 40 40" fill="none">
-      <rect width="40" height="40" rx="10" fill={BRAND.tealDark} />
-      <ellipse cx="20" cy="13" rx="7" ry="7" fill={BRAND.red} />
+      <rect width="40" height="40" rx="10" fill="#124f61" />
+      <ellipse cx="20" cy="13" rx="7" ry="7" fill="#d63030" />
       <path d="M13 20 Q10 28 16 30 Q22 32 26 26 Q32 18 24 16"
-        stroke={BRAND.tealLight} strokeWidth="3" strokeLinecap="round" fill="none" />
+        stroke="#2a8ba6" strokeWidth="3" strokeLinecap="round" fill="none" />
     </svg>
   );
 }
@@ -199,7 +199,6 @@ function Nav({ active, setActive, menuOpen, setMenuOpen, user, onLogout }) {
         height:56, padding:"0 16px",
         display:"flex", alignItems:"center", justifyContent:"space-between",
       }}>
-        {/* Logo */}
         <div style={{ display:"flex", alignItems:"center", gap:9 }}>
           <LogoMark size={30} />
           <span style={{ fontWeight:700, fontSize:15, color:BRAND.text, letterSpacing:"-0.2px" }}>
@@ -207,7 +206,6 @@ function Nav({ active, setActive, menuOpen, setMenuOpen, user, onLogout }) {
           </span>
         </div>
 
-        {/* Desktop nav */}
         <div className="desktop-only" style={{ display:"flex", alignItems:"center", gap:2 }}>
           {NAV_ITEMS.map(({ id, label, Icon }) => (
             <button key={id}
@@ -224,8 +222,8 @@ function Nav({ active, setActive, menuOpen, setMenuOpen, user, onLogout }) {
             </button>
           ))}
 
-          {/* Séparateur + user */}
           <div style={{ width:1, height:22, background:BRAND.border, margin:"0 8px" }} />
+
           <button
             className={`nav-btn ${active === "preferences" ? "active" : ""}`}
             onClick={() => setActive("preferences")}
@@ -238,6 +236,7 @@ function Nav({ active, setActive, menuOpen, setMenuOpen, user, onLogout }) {
             }}>
             <Settings size={13} strokeWidth={2} /> {user.nom}
           </button>
+
           <button className="btn-ghost" onClick={onLogout} style={{
             display:"flex", alignItems:"center", gap:5,
             padding:"6px 10px", borderRadius:9,
@@ -249,14 +248,12 @@ function Nav({ active, setActive, menuOpen, setMenuOpen, user, onLogout }) {
           </button>
         </div>
 
-        {/* Mobile hamburger */}
         <button className="mobile-only" onClick={() => setMenuOpen(!menuOpen)}
           style={{ background:"transparent", border:"none", color:BRAND.text, cursor:"pointer", padding:4, display:"flex" }}>
           {menuOpen ? <X size={21} /> : <Menu size={21} />}
         </button>
       </div>
 
-      {/* Mobile menu */}
       {menuOpen && (
         <div className="mobile-only" style={{
           position:"fixed", top:56, left:0, right:0, zIndex:99,
@@ -353,7 +350,6 @@ function Accueil({ setActive, notes, setNotes }) {
         ))}
       </div>
 
-      {/* Notes */}
       <div style={{ background:BRAND.surface, borderRadius:16, border:`1px solid ${BRAND.border}`, padding:20 }}>
         <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:16 }}>
           <h3 style={{ fontSize:15, fontWeight:700, color:BRAND.text }}>Notes</h3>
@@ -434,7 +430,51 @@ function Evenements() {
 
   return (
     <div className="fade-up">
-      <h2 style={{ fontSize:20, fontW
+      <h2 style={{ fontSize:20, fontWeight:700, color:BRAND.text, marginBottom:5 }}>Événements</h2>
+      <p style={{ fontSize:14, color:BRAND.muted, marginBottom:20 }}>Programmation passée et à venir</p>
+
+      <div style={{ display:"flex", gap:7, marginBottom:18 }}>
+        {filters.map(f => (
+          <button key={f} onClick={() => setFilter(f)} style={{
+            padding:"6px 15px", borderRadius:20,
+            border:`1px solid ${filter === f ? BRAND.teal : BRAND.border2}`,
+            background: filter === f ? `${BRAND.teal}22` : "transparent",
+            color: filter === f ? BRAND.tealLight : BRAND.muted,
+            fontSize:13, fontWeight:500, cursor:"pointer", transition:"all 0.15s",
+          }}>{f}</button>
+        ))}
+      </div>
+
+      <div style={{ display:"flex", flexDirection:"column", gap:8 }}>
+        {filtered.map(ev => (
+          <div key={ev.titre} style={{
+            background:BRAND.surface, borderRadius:13,
+            border:`1px solid ${BRAND.border}`,
+            padding:"14px 17px",
+            display:"flex", justifyContent:"space-between", alignItems:"center", gap:12,
+          }}>
+            <div>
+              <div style={{ color:BRAND.text, fontWeight:600, fontSize:15, marginBottom:4 }}>{ev.titre}</div>
+              <div style={{ color:BRAND.muted, fontSize:13, display:"flex", alignItems:"center", gap:6 }}>
+                <Calendar size={12} strokeWidth={2} />
+                {new Date(ev.date).toLocaleDateString("fr-CA", { year:"numeric", month:"long", day:"numeric" })}
+                <span style={{ color:BRAND.faint }}>·</span>
+                {ev.type}
+              </div>
+            </div>
+            <span style={{
+              padding:"4px 11px", borderRadius:20, fontSize:12, fontWeight:600, whiteSpace:"nowrap",
+              background: ev.statut === "À venir" ? "rgba(46,184,126,0.14)" : "rgba(100,110,120,0.14)",
+              color: ev.statut === "À venir" ? "#2eb87e" : BRAND.muted,
+              border:`1px solid ${ev.statut === "À venir" ? "#2eb87e38" : BRAND.border}`,
+            }}>{ev.statut}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 // ─── Membres ──────────────────────────────────────────────────────────────────
 function Membres() {
   return (
@@ -607,4 +647,4 @@ export default function App() {
       </div>
     </>
   );
-                }
+}
