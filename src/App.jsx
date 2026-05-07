@@ -23,7 +23,7 @@ const BRAND = {
 const NAV_ITEMS = [
   { id: "accueil",    label: "Accueil",    Icon: Home },
   { id: "calendrier", label: "Calendrier", Icon: Calendar },
-  { id: "evenements", label: "Événements", Icon: Drama },
+  { id: "evenements", label: "Ã‰vÃ©nements", Icon: Drama },
   { id: "courriels",  label: "Courriels",  Icon: Mail },
   { id: "disque",     label: "Disque",     Icon: FolderOpen },
   { id: "membres",    label: "Membres",    Icon: Users },
@@ -31,27 +31,28 @@ const NAV_ITEMS = [
 ];
 
 const CARDS = [
-  { id: "calendrier", label: "Calendrier",     desc: "Événements & spectacles", Icon: Calendar,   color: BRAND.teal,  bg: "rgba(26,107,130,0.18)" },
-  { id: "evenements", label: "Événements",     desc: "Passés et à venir",       Icon: Drama,      color: BRAND.red,   bg: "rgba(214,48,48,0.14)" },
+  { id: "calendrier", label: "Calendrier",     desc: "Ã‰vÃ©nements & spectacles", Icon: Calendar,   color: BRAND.teal,  bg: "rgba(26,107,130,0.18)" },
+  { id: "evenements", label: "Ã‰vÃ©nements",     desc: "PassÃ©s et Ã  venir",       Icon: Drama,      color: BRAND.red,   bg: "rgba(214,48,48,0.14)" },
   { id: "courriels",  label: "Courriels",      desc: "Consultation",            Icon: Mail,       color: "#4a90b8",   bg: "rgba(74,144,184,0.14)" },
-  { id: "disque",     label: "Disque partagé", desc: "Documents",               Icon: FolderOpen, color: "#2eb87e",   bg: "rgba(46,184,126,0.12)" },
-  { id: "membres",    label: "Membres",        desc: "Coordonnées",             Icon: Users,      color: "#c9873a",   bg: "rgba(201,135,58,0.14)" },
+  { id: "disque",     label: "Disque partagÃ©", desc: "Documents",               Icon: FolderOpen, color: "#2eb87e",   bg: "rgba(46,184,126,0.12)" },
+  { id: "membres",    label: "Membres",        desc: "CoordonnÃ©es",             Icon: Users,      color: "#c9873a",   bg: "rgba(201,135,58,0.14)" },
   { id: "ressources", label: "Ressources",     desc: "Documents & outils",      Icon: BookOpen,   color: "#8b6fc9",   bg: "rgba(139,111,201,0.14)" },
 ];
 
 const EVENEMENTS_DATA = [
-  { titre: "Ballet Synergie",                date: "2026-09-15", statut: "À venir", type: "Danse" },
-  { titre: "Journée Vinyles",                date: "2026-06-21", statut: "À venir", type: "Musique" },
-  { titre: "The Clamp",                      date: "2026-05-30", statut: "À venir", type: "Rock / Métal" },
-  { titre: "Lou-Adriane Cassidy",            date: "2026-03-14", statut: "Passé",   type: "Chanson" },
-  { titre: "Olivier Simard – Classe à part", date: "2026-02-22", statut: "Passé",   type: "Magie" },
+  { titre: "Ballet Synergie",                date: "2026-09-15", statut: "Ã€ venir", type: "Danse" },
+  { titre: "JournÃ©e Vinyles",                date: "2026-06-21", statut: "Ã€ venir", type: "Musique" },
+  { titre: "The Clamp",                      date: "2026-05-30", statut: "Ã€ venir", type: "Rock / MÃ©tal" },
+  { titre: "Lou-Adriane Cassidy",            date: "2026-03-14", statut: "PassÃ©",   type: "Chanson" },
+  { titre: "Olivier Simard â€“ Classe Ã  part", date: "2026-02-22", statut: "PassÃ©",   type: "Magie" },
 ];
 
 const MEMBRES = [
-  { nom: "Stéphane",      role: "Programmation & promotion", email: "stephane@lagrandmontoise.ca" },
+  { nom: "StÃ©phane",      role: "Programmation & promotion", email: "stephane@lagrandmontoise.ca" },
   { nom: "Marie",         role: "Coordination",              email: "marie@lagrandmontoise.ca" },
-  { nom: "Jean-François", role: "Technique",                 email: "jf@lagrandmontoise.ca" },
+  { nom: "Jean-FranÃ§ois", role: "Technique",                 email: "jf@lagrandmontoise.ca" },
 ];
+
 const CSS = `
   @import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -82,6 +83,7 @@ const CSS = `
   @media (max-width: 639px) { .desktop-only { display: none !important; } }
 `;
 
+// â”€â”€â”€ Google Auth â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function useGoogleAuth() {
   const [accessToken, setAccessToken] = useState(() => sessionStorage.getItem("gm_gtoken") || null);
   const [loading, setLoading] = useState(false);
@@ -117,6 +119,7 @@ async function gFetch(url, token) {
   return res.json();
 }
 
+// â”€â”€â”€ LogoMark â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function LogoMark({ size = 30 }) {
   return (
     <svg width={size} height={size} viewBox="0 0 40 40" fill="none">
@@ -127,13 +130,14 @@ function LogoMark({ size = 30 }) {
   );
 }
 
+// â”€â”€â”€ ConnectBanner â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function ConnectBanner({ onSignIn, loading }) {
   return (
     <div style={{ background:`${BRAND.teal}12`, border:`1px solid ${BRAND.teal}30`, borderRadius:14, padding:20, textAlign:"center", marginBottom:20 }}>
       <AlertCircle size={22} color={BRAND.teal} style={{ marginBottom:10 }} />
       <p style={{ color:BRAND.text, fontSize:14, fontWeight:600, marginBottom:5 }}>Connexion Google requise</p>
       <p style={{ color:BRAND.muted, fontSize:13, marginBottom:16, lineHeight:1.5 }}>
-        Connecte le compte <strong style={{ color:BRAND.text }}>prog.grandmontoise@gmail.com</strong> pour accéder à cette section.
+        Connecte le compte <strong style={{ color:BRAND.text }}>prog.grandmontoise@gmail.com</strong> pour accÃ©der Ã  cette section.
       </p>
       <button onClick={onSignIn} className="btn-primary" style={{
         background:BRAND.teal, border:"none", borderRadius:10, color:"#fff",
@@ -146,6 +150,8 @@ function ConnectBanner({ onSignIn, loading }) {
     </div>
   );
 }
+
+// â”€â”€â”€ Login â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function LoginScreen({ onLogin }) {
   const [pwd, setPwd] = useState("");
   const [error, setError] = useState(false);
@@ -161,12 +167,12 @@ function LoginScreen({ onLogin }) {
         <div style={{ marginBottom:28 }}>
           <div style={{ display:"inline-flex", marginBottom:18 }}><LogoMark size={56} /></div>
           <h1 style={{ fontSize:22, fontWeight:700, color:BRAND.text, marginBottom:5 }}>La Grandmontoise</h1>
-          <p style={{ fontSize:14, color:BRAND.muted }}>Comité de programmation</p>
+          <p style={{ fontSize:14, color:BRAND.muted }}>ComitÃ© de programmation</p>
         </div>
         <div style={{ background:BRAND.surface, borderRadius:18, border:`1px solid ${BRAND.border}`, padding:"26px 22px" }}>
           <div style={{ display:"flex", alignItems:"center", gap:7, marginBottom:18 }}>
             <Lock size={13} color={BRAND.muted} />
-            <span style={{ fontSize:13, color:BRAND.muted, fontWeight:500 }}>Accès restreint</span>
+            <span style={{ fontSize:13, color:BRAND.muted, fontWeight:500 }}>AccÃ¨s restreint</span>
           </div>
           <div className={shake ? "shake" : ""}>
             <input type="password" placeholder="Mot de passe" value={pwd}
@@ -185,6 +191,7 @@ function LoginScreen({ onLogin }) {
   );
 }
 
+// â”€â”€â”€ Nav â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function Nav({ active, setActive, menuOpen, setMenuOpen, accessToken, onGoogleSignIn, onGoogleSignOut, googleLoading }) {
   return (
     <>
@@ -228,7 +235,10 @@ function Nav({ active, setActive, menuOpen, setMenuOpen, accessToken, onGoogleSi
       )}
     </>
   );
-  function Courriels({ accessToken, onSignIn, googleLoading }) {
+}
+
+// â”€â”€â”€ Courriels â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+function Courriels({ accessToken, onSignIn, googleLoading }) {
   const [emails, setEmails] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selected, setSelected] = useState(null);
@@ -247,7 +257,7 @@ function Nav({ active, setActive, menuOpen, setMenuOpen, accessToken, onGoogleSi
         const g = n => h.find(x => x.name===n)?.value || "";
         return { id:m.id, subject:g("Subject")||"(Sans objet)", from:g("From"), date:g("Date"), snippet:m.snippet };
       }));
-    } catch { setError("Impossible de charger les courriels. Le token est peut-être expiré."); }
+    } catch { setError("Impossible de charger les courriels. Le token est peut-Ãªtre expirÃ©."); }
     setLoading(false);
   }, [accessToken]);
 
@@ -267,7 +277,7 @@ function Nav({ active, setActive, menuOpen, setMenuOpen, accessToken, onGoogleSi
       {loading && !emails.length && <div style={{ textAlign:"center", padding:"40px 0", color:BRAND.muted }}><RefreshCw size={24} className="spinning" style={{ margin:"0 auto 12px" }} /><p style={{ fontSize:14 }}>Chargement...</p></div>}
       {selected ? (
         <div>
-          <button onClick={() => setSelected(null)} className="btn-ghost" style={{ background:"transparent", border:`1px solid ${BRAND.border2}`, borderRadius:8, color:BRAND.muted, fontSize:13, padding:"6px 14px", cursor:"pointer", marginBottom:16 }}>← Retour</button>
+          <button onClick={() => setSelected(null)} className="btn-ghost" style={{ background:"transparent", border:`1px solid ${BRAND.border2}`, borderRadius:8, color:BRAND.muted, fontSize:13, padding:"6px 14px", cursor:"pointer", marginBottom:16 }}>â† Retour</button>
           <div style={{ background:BRAND.surface, borderRadius:14, border:`1px solid ${BRAND.border}`, padding:20 }}>
             <h3 style={{ color:BRAND.text, fontSize:16, fontWeight:700, marginBottom:8 }}>{selected.subject}</h3>
             <p style={{ color:BRAND.muted, fontSize:13, marginBottom:4 }}>De : {selected.from}</p>
@@ -290,6 +300,7 @@ function Nav({ active, setActive, menuOpen, setMenuOpen, accessToken, onGoogleSi
   );
 }
 
+// â”€â”€â”€ Calendrier â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function Calendrier({ accessToken, onSignIn, googleLoading }) {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -314,256 +325,4 @@ function Calendrier({ accessToken, onSignIn, googleLoading }) {
     <div className="fade-up">
       <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:20 }}>
         <h2 style={{ fontSize:20, fontWeight:700, color:BRAND.text }}>Calendrier</h2>
-        <button onClick={load} style={{ background:"transparent", border:"none", cursor:"pointer", color:BRAND.muted, display:"flex" }}>
-          <RefreshCw size={16} className={loading?"spinning":""} />
-        </button>
-      </div>
-      {error && <p style={{ color:BRAND.red, fontSize:13, marginBottom:16, background:"rgba(214,48,48,0.1)", padding:"10px 14px", borderRadius:10 }}>{error}</p>}
-      {loading && !events.length && <div style={{ textAlign:"center", padding:"40px 0", color:BRAND.muted }}><RefreshCw size={24} className="spinning" style={{ margin:"0 auto 12px" }} /><p style={{ fontSize:14 }}>Chargement...</p></div>}
-      <div style={{ display:"flex", flexDirection:"column", gap:8 }}>
-        {events.map(ev => {
-          const start = ev.start?.dateTime || ev.start?.date;
-          const date = start ? new Date(start).toLocaleDateString("fr-CA", { weekday:"long", month:"long", day:"numeric", hour:"2-digit", minute:"2-digit" }) : "";
-          return (
-            <div key={ev.id} style={{ background:BRAND.surface, borderRadius:13, border:`1px solid ${BRAND.border}`, padding:"14px 17px" }}>
-              <div style={{ color:BRAND.text, fontWeight:600, fontSize:15, marginBottom:4 }}>{ev.summary || "(Sans titre)"}</div>
-              <div style={{ color:BRAND.muted, fontSize:13, display:"flex", alignItems:"center", gap:6 }}><Calendar size={12} />{date}</div>
-              {ev.location && <div style={{ color:BRAND.faint, fontSize:12, marginTop:4 }}>📍 {ev.location}</div>}
-              {ev.description && <div style={{ color:BRAND.muted, fontSize:12, marginTop:6, lineHeight:1.5 }}>{ev.description.substring(0,120)}{ev.description.length>120?"…":""}</div>}
-            </div>
-          );
-        })}
-        {!loading && events.length===0 && <p style={{ color:BRAND.faint, fontSize:14, textAlign:"center", padding:"40px 0" }}>Aucun événement à venir</p>}
-      </div>
-    </div>
-  );
-              }
-  function Disque({ accessToken, onSignIn, googleLoading }) {
-  const [files, setFiles] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-
-  const load = useCallback(async () => {
-    if (!accessToken) return;
-    setLoading(true); setError(null);
-    try {
-      const data = await gFetch("https://www.googleapis.com/drive/v3/files?pageSize=30&fields=files(id,name,mimeType,modifiedTime,webViewLink)&orderBy=modifiedTime desc", accessToken);
-      setFiles(data.files || []);
-    } catch { setError("Impossible de charger le disque."); }
-    setLoading(false);
-  }, [accessToken]);
-
-  useEffect(() => { load(); }, [load]);
-
-  const icon = (mime) => {
-    if (mime?.includes("folder")) return "📁";
-    if (mime?.includes("document")||mime?.includes("word")) return "📄";
-    if (mime?.includes("spreadsheet")||mime?.includes("excel")) return "📊";
-    if (mime?.includes("presentation")||mime?.includes("powerpoint")) return "📽️";
-    if (mime?.includes("pdf")) return "📕";
-    if (mime?.includes("image")) return "🖼️";
-    return "📎";
-  };
-
-  if (!accessToken) return <div className="fade-up"><h2 style={{ fontSize:20, fontWeight:700, color:BRAND.text, marginBottom:20 }}>Disque partagé</h2><ConnectBanner onSignIn={onSignIn} loading={googleLoading} /></div>;
-
-  return (
-    <div className="fade-up">
-      <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:20 }}>
-        <h2 style={{ fontSize:20, fontWeight:700, color:BRAND.text }}>Disque partagé</h2>
-        <button onClick={load} style={{ background:"transparent", border:"none", cursor:"pointer", color:BRAND.muted, display:"flex" }}>
-          <RefreshCw size={16} className={loading?"spinning":""} />
-        </button>
-      </div>
-      {error && <p style={{ color:BRAND.red, fontSize:13, marginBottom:16, background:"rgba(214,48,48,0.1)", padding:"10px 14px", borderRadius:10 }}>{error}</p>}
-      {loading && !files.length && <div style={{ textAlign:"center", padding:"40px 0", color:BRAND.muted }}><RefreshCw size={24} className="spinning" style={{ margin:"0 auto 12px" }} /><p style={{ fontSize:14 }}>Chargement...</p></div>}
-      <div style={{ display:"flex", flexDirection:"column", gap:8 }}>
-        {files.map(f => (
-          <a key={f.id} href={f.webViewLink} target="_blank" rel="noopener noreferrer" style={{ textDecoration:"none" }}>
-            <div style={{ background:BRAND.surface, borderRadius:13, border:`1px solid ${BRAND.border}`, padding:"13px 17px", display:"flex", alignItems:"center", gap:12, transition:"border-color 0.15s" }}>
-              <span style={{ fontSize:20, flexShrink:0 }}>{icon(f.mimeType)}</span>
-              <div style={{ flex:1, overflow:"hidden" }}>
-                <div style={{ color:BRAND.text, fontWeight:500, fontSize:14, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{f.name}</div>
-                <div style={{ color:BRAND.muted, fontSize:12, marginTop:2 }}>{f.modifiedTime ? new Date(f.modifiedTime).toLocaleDateString("fr-CA") : ""}</div>
-              </div>
-              <ExternalLink size={14} color={BRAND.faint} style={{ flexShrink:0 }} />
-            </div>
-          </a>
-        ))}
-        {!loading && files.length===0 && <p style={{ color:BRAND.faint, fontSize:14, textAlign:"center", padding:"40px 0" }}>Aucun fichier trouvé</p>}
-      </div>
-    </div>
-  );
-}
-
-function Accueil({ setActive, notes, setNotes }) {
-  const [newNote, setNewNote] = useState("");
-  const [adding, setAdding] = useState(false);
-  const addNote = () => { if (!newNote.trim()) return; setNotes([...notes, { id:Date.now(), text:newNote, starred:false }]); setNewNote(""); setAdding(false); };
-  return (
-    <div>
-      <div className="fade-up" style={{ marginBottom:26 }}>
-        <h2 style={{ fontSize:20, fontWeight:700, color:BRAND.text, marginBottom:5 }}>Gestion du comité de programmation</h2>
-        <p style={{ fontSize:14, color:BRAND.muted }}>Espace interne — La Grandmontoise, Saint-Gédéon</p>
-      </div>
-      <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill, minmax(148px, 1fr))", gap:11, marginBottom:30 }}>
-        {CARDS.map(({ id, label, desc, Icon, color, bg }, i) => (
-          <button key={id} className="card" onClick={() => setActive(id)} style={{ background:bg, border:`1px solid ${color}28`, borderRadius:14, padding:"17px 15px", textAlign:"left", cursor:"pointer", animation:`fadeUp 0.4s ease ${i*0.055}s both` }}>
-            <div style={{ width:38, height:38, borderRadius:10, background:`${color}1e`, border:`1px solid ${color}30`, display:"flex", alignItems:"center", justifyContent:"center", marginBottom:11 }}>
-              <Icon size={18} color={color} strokeWidth={1.8} />
-            </div>
-            <div style={{ color:BRAND.text, fontWeight:600, fontSize:14, marginBottom:3 }}>{label}</div>
-            <div style={{ color:BRAND.muted, fontSize:12 }}>{desc}</div>
-          </button>
-        ))}
-      </div>
-      <div style={{ background:BRAND.surface, borderRadius:16, border:`1px solid ${BRAND.border}`, padding:20 }}>
-        <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:16 }}>
-          <h3 style={{ fontSize:15, fontWeight:700, color:BRAND.text }}>Notes</h3>
-          <button className="btn-primary" onClick={() => setAdding(true)} style={{ display:"flex", alignItems:"center", gap:5, background:BRAND.teal, border:"none", borderRadius:8, color:"#fff", fontSize:13, fontWeight:600, padding:"6px 13px", cursor:"pointer" }}>
-            <Plus size={13} /> Ajouter
-          </button>
-        </div>
-        {adding && (
-          <div style={{ marginBottom:13 }}>
-            <textarea autoFocus value={newNote} onChange={e => setNewNote(e.target.value)} placeholder="Nouvelle note..." rows={3}
-              style={{ width:"100%", background:BRAND.surface2, border:`1.5px solid ${BRAND.border2}`, borderRadius:10, color:BRAND.text, fontSize:14, padding:12, resize:"vertical", marginBottom:8 }} />
-            <div style={{ display:"flex", gap:8 }}>
-              <button className="btn-primary" onClick={addNote} style={{ background:BRAND.teal, border:"none", borderRadius:8, color:"#fff", fontSize:13, fontWeight:600, padding:"7px 15px", cursor:"pointer" }}>Sauvegarder</button>
-              <button className="btn-ghost" onClick={() => { setAdding(false); setNewNote(""); }} style={{ background:"transparent", border:`1px solid ${BRAND.border2}`, borderRadius:8, color:BRAND.muted, fontSize:13, padding:"7px 15px", cursor:"pointer" }}>Annuler</button>
-            </div>
-          </div>
-        )}
-        {notes.length===0 && !adding && <p style={{ color:BRAND.faint, fontSize:14, textAlign:"center", padding:"22px 0" }}>Aucune note pour l'instant</p>}
-        <div style={{ display:"flex", flexDirection:"column", gap:8 }}>
-          {notes.map(note => (
-            <div key={note.id} style={{ background:BRAND.surface2, borderRadius:11, border:`1px solid ${BRAND.border}`, padding:"12px 14px", display:"flex", justifyContent:"space-between", alignItems:"flex-start", gap:10 }}>
-              <p style={{ color:BRAND.text, fontSize:14, lineHeight:1.55, flex:1 }}>
-                {note.starred && <Star size={12} color="#c9873a" fill="#c9873a" style={{ marginRight:5, verticalAlign:"middle" }} />}{note.text}
-              </p>
-              <div style={{ display:"flex", gap:3, flexShrink:0 }}>
-                <button onClick={() => setNotes(notes.map(n => n.id===note.id?{...n,starred:!n.starred}:n))} style={{ background:"transparent", border:"none", cursor:"pointer", padding:4, display:"flex" }}>
-                  <Star size={14} fill={note.starred?"#c9873a":"none"} color={note.starred?"#c9873a":BRAND.muted} />
-                </button>
-                <button onClick={() => setNotes(notes.filter(n => n.id!==note.id))} style={{ background:"transparent", border:"none", cursor:"pointer", padding:4, display:"flex", color:BRAND.muted }}>
-                  <Trash2 size={14} />
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function Evenements() {
-  const [filter, setFilter] = useState("Tous");
-  const filters = ["Tous", "À venir", "Passé"];
-  const filtered = filter==="Tous" ? EVENEMENTS_DATA : EVENEMENTS_DATA.filter(e => e.statut===filter);
-  return (
-    <div className="fade-up">
-      <h2 style={{ fontSize:20, fontWeight:700, color:BRAND.text, marginBottom:5 }}>Événements</h2>
-      <p style={{ fontSize:14, color:BRAND.muted, marginBottom:20 }}>Programmation passée et à venir</p>
-      <div style={{ display:"flex", gap:7, marginBottom:18 }}>
-        {filters.map(f => <button key={f} onClick={() => setFilter(f)} style={{ padding:"6px 15px", borderRadius:20, border:`1px solid ${filter===f?BRAND.teal:BRAND.border2}`, background:filter===f?`${BRAND.teal}22`:"transparent", color:filter===f?BRAND.tealLight:BRAND.muted, fontSize:13, fontWeight:500, cursor:"pointer" }}>{f}</button>)}
-      </div>
-      <div style={{ display:"flex", flexDirection:"column", gap:8 }}>
-        {filtered.map(ev => (
-          <div key={ev.titre} style={{ background:BRAND.surface, borderRadius:13, border:`1px solid ${BRAND.border}`, padding:"14px 17px", display:"flex", justifyContent:"space-between", alignItems:"center", gap:12 }}>
-            <div>
-              <div style={{ color:BRAND.text, fontWeight:600, fontSize:15, marginBottom:4 }}>{ev.titre}</div>
-              <div style={{ color:BRAND.muted, fontSize:13, display:"flex", alignItems:"center", gap:6 }}>
-                <Calendar size={12} />{new Date(ev.date).toLocaleDateString("fr-CA", { year:"numeric", month:"long", day:"numeric" })}<span style={{ color:BRAND.faint }}>·</span>{ev.type}
-              </div>
-            </div>
-            <span style={{ padding:"4px 11px", borderRadius:20, fontSize:12, fontWeight:600, whiteSpace:"nowrap", background:ev.statut==="À venir"?"rgba(46,184,126,0.14)":"rgba(100,110,120,0.14)", color:ev.statut==="À venir"?"#2eb87e":BRAND.muted, border:`1px solid ${ev.statut==="À venir"?"#2eb87e38":BRAND.border}` }}>{ev.statut}</span>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function Membres() {
-  return (
-    <div className="fade-up">
-      <h2 style={{ fontSize:20, fontWeight:700, color:BRAND.text, marginBottom:5 }}>Membres</h2>
-      <p style={{ fontSize:14, color:BRAND.muted, marginBottom:20 }}>Coordonnées du comité</p>
-      <div style={{ display:"flex", flexDirection:"column", gap:8 }}>
-        {MEMBRES.map(m => (
-          <div key={m.nom} style={{ background:BRAND.surface, borderRadius:13, border:`1px solid ${BRAND.border}`, padding:"14px 17px", display:"flex", alignItems:"center", gap:13 }}>
-            <div style={{ width:40, height:40, borderRadius:10, flexShrink:0, background:`${BRAND.teal}1a`, border:`1px solid ${BRAND.teal}30`, display:"flex", alignItems:"center", justifyContent:"center" }}>
-              <Users size={17} color={BRAND.teal} strokeWidth={1.8} />
-            </div>
-            <div>
-              <div style={{ color:BRAND.text, fontWeight:600, fontSize:15 }}>{m.nom}</div>
-              <div style={{ color:BRAND.muted, fontSize:13 }}>{m.role}</div>
-              <div style={{ color:BRAND.tealLight, fontSize:13, marginTop:2 }}>{m.email}</div>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function Ressources() {
-  return (
-    <div className="fade-up" style={{ textAlign:"center", padding:"68px 20px" }}>
-      <div style={{ width:60, height:60, borderRadius:17, margin:"0 auto 18px", background:`${BRAND.teal}16`, border:`1px solid ${BRAND.teal}30`, display:"flex", alignItems:"center", justifyContent:"center" }}>
-        <BookOpen size={26} color={BRAND.teal} strokeWidth={1.6} />
-      </div>
-      <h2 style={{ fontSize:19, fontWeight:700, color:BRAND.text, marginBottom:8 }}>Ressources</h2>
-      <p style={{ fontSize:14, color:BRAND.muted, maxWidth:300, margin:"0 auto 20px", lineHeight:1.6 }}>Documents et outils pour le comité de programmation.</p>
-      <span style={{ display:"inline-block", background:`${BRAND.teal}16`, border:`1px solid ${BRAND.teal}38`, color:BRAND.tealLight, borderRadius:20, padding:"5px 17px", fontSize:13, fontWeight:500 }}>En construction</span>
-    </div>
-  );
-}
-
-export default function App() {
-  const [loggedIn, setLoggedIn] = useState(() => { try { return sessionStorage.getItem("gm_auth")==="1"; } catch { return false; } });
-  const [active, setActive] = useState("accueil");
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [notes, setNotes] = useState([{ id:1, text:"Items à acquérir : Bouilloire, Pichets", starred:true }]);
-  const { accessToken, signIn, signOut, loading: googleLoading } = useGoogleAuth();
-
-  useEffect(() => {
-    if (document.getElementById("gsi-script")) return;
-    const s = document.createElement("script");
-    s.id = "gsi-script";
-    s.src = "https://accounts.google.com/gsi/client";
-    s.async = true;
-    document.head.appendChild(s);
-  }, []);
-
-  const handleLogin = () => { try { sessionStorage.setItem("gm_auth","1"); } catch {} setLoggedIn(true); };
-
-  if (!loggedIn) return <LoginScreen onLogin={handleLogin} />;
-
-  const gProps = { accessToken, onSignIn: signIn, googleLoading };
-
-  const renderPage = () => {
-    switch(active) {
-      case "accueil":    return <Accueil setActive={setActive} notes={notes} setNotes={setNotes} />;
-      case "evenements": return <Evenements />;
-      case "membres":    return <Membres />;
-      case "calendrier": return <Calendrier {...gProps} />;
-      case "courriels":  return <Courriels {...gProps} />;
-      case "disque":     return <Disque {...gProps} />;
-      case "ressources": return <Ressources />;
-      default: return null;
-    }
-  };
-
-  return (
-    <div style={{ minHeight:"100vh", background:BRAND.bg }}>
-      <style>{CSS}</style>
-      <Nav active={active} setActive={setActive} menuOpen={menuOpen} setMenuOpen={setMenuOpen}
-        accessToken={accessToken} onGoogleSignIn={signIn} onGoogleSignOut={signOut} googleLoading={googleLoading} />
-      <main style={{ maxWidth:860, margin:"0 auto", padding:"76px 16px 48px" }}>
-        {renderPage()}
-      </main>
-    </div>
-  );
-      }
+        <button onClick={load} style={{ background:"transparent", border:"none", cursor:"pointer", color:BRAN
