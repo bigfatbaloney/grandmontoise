@@ -325,4 +325,268 @@ function Calendrier({ accessToken, onSignIn, googleLoading }) {
     <div className="fade-up">
       <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:20 }}>
         <h2 style={{ fontSize:20, fontWeight:700, color:BRAND.text }}>Calendrier</h2>
-        <button onClick={load} style={{ background:"transparent", border:"none", cursor:"pointer", color:BRAN
+        <button onClick={load} style={{ background:"transparent", border:"none", cursor:"pointer", color:BRAND.muted, display:"flex" }}>
+          <RefreshCw size={16} className={loading?"spinning":""} />
+        </button>
+      </div>
+      {error && <p style={{ color:BRAND.red, fontSize:13, marginBottom:16, background:"rgba(214,48,48,0.1)", padding:"10px 14px", borderRadius:10 }}>{error}</p>}
+      {loading && !events.length && <div style={{ textAlign:"center", padding:"40px 0", color:BRAND.muted }}><RefreshCw size={24} className="spinning" style={{ margin:"0 auto 12px" }} /><p style={{ fontSize:14 }}>Chargement...</p></div>}
+      <div style={{ display:"flex", flexDirection:"column", gap:8 }}>
+        {events.map((ev, i) => {
+          const start = ev.start?.dateTime || ev.start?.date || "";
+          const d = start ? new Date(start) : null;
+          return (
+            <div key={i} style={{ background:BRAND.surface, borderRadius:13, border:`1px solid ${BRAND.border}`, padding:"14px 17px" }}>
+              <div style={{ color:BRAND.text, fontWeight:600, fontSize:14, marginBottom:4 }}>{ev.summary || "(Sans titre)"}</div>
+              {d && <div style={{ color:BRAND.muted, fontSize:12 }}>{d.toLocaleDateString("fr-CA", { weekday:"long", year:"numeric", month:"long", day:"numeric" })}</div>}
+              {ev.location && <div style={{ color:BRAND.faint, fontSize:12, marginTop:3 }}>{ev.location}</div>}
+            </div>
+          );
+        })}
+        {!loading && !events.length && <p style={{ color:BRAND.muted, fontSize:14, textAlign:"center", padding:"30px 0" }}>Aucun événement à venir.</p>}
+      </div>
+    </div>
+  );
+}
+
+// ─── Disque ────────────────────────────────────────────────────────────────────
+function Disque({ accessToken, onSignIn, googleLoading }) {
+  const [files, setFiles] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const load = useCallback(async () => {
+    if (!accessToken) return;
+    setLoading(true); setError(null);
+    try {
+      const data = await gFetch(
+        "https://www.googleapis.com/drive/v3/files?pageSize=30&orderBy=modifiedTime+desc&fields=files(id,name,mimeType,modifiedTime,webViewLink,size)",
+        accessToken
+      );
+      setFiles(data.files || []);
+    } catch { setError("Impossible de charger les fichiers."); }
+    setLoading(false);
+  }, [accessToken]);
+
+  useEffect(() => { load(); }, [load]);
+
+  if (!accessToken) return <div className="fade-up"><h2 style={{ fontSize:20, fontWeight:700, color:BRAND.text, marginBottom:20 }}>Disque partagé</h2><ConnectBanner onSignIn={onSignIn} loading={googleLoading} /></div>;
+
+  const iconFor = (mime) => {
+    if (mime.includes("folder")) return "📁";
+    if (mime.includes("document")) return "📄";
+    if (mime.includes("spreadsheet")) return "📊";
+    if (mime.includes("presentation")) return "📽️";
+    if (mime.includes("pdf")) return "📋";
+    if (mime.includes("image")) return "🖼️";
+    return "📎";
+  };
+
+  return (
+    <div className="fade-up">
+      <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:20 }}>
+        <h2 style={{ fontSize:20, fontWeight:700, color:BRAND.text }}>Disque partagé</h2>
+        <button onClick={load} style={{ background:"transparent", border:"none", cursor:"pointer", color:BRAND.muted, display:"flex" }}>
+          <RefreshCw size={16} className={loading?"spinning":""} />
+        </button>
+      </div>
+      {error && <p style={{ color:BRAND.red, fontSize:13, marginBottom:16, background:"rgba(214,48,48,0.1)", padding:"10px 14px", borderRadius:10 }}>{error}</p>}
+      {loading && !files.length && <div style={{ textAlign:"center", padding:"40px 0", color:BRAND.muted }}><RefreshCw size={24} className="spinning" style={{ margin:"0 auto 12px" }} /><p style={{ fontSize:14 }}>Chargement...</p></div>}
+      <div style={{ display:"flex", flexDirection:"column", gap:6 }}>
+        {files.map(f => (
+          <a key={f.id} href={f.webViewLink} target="_blank" rel="noreferrer" style={{ textDecoration:"none" }}>
+            <div style={{ background:BRAND.surface, borderRadius:12, border:`1px solid ${BRAND.border}`, padding:"12px 16px", display:"flex", alignItems:"center", gap:12, transition:"border-color 0.15s" }}>
+              <span style={{ fontSize:18 }}>{iconFor(f.mimeType)}</span>
+              <div style={{ flex:1, minWidth:0 }}>
+                <div style={{ color:BRAND.text, fontWeight:500, fontSize:14, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{f.name}</div>
+                {f.modifiedTime && <div style={{ color:BRAND.muted, fontSize:11, marginTop:2 }}>{new Date(f.modifiedTime).toLocaleDateString("fr-CA")}</div>}
+              </div>
+              <ExternalLink size={13} color={BRAND.faint} />
+            </div>
+          </a>
+        ))}
+        {!loading && !files.length && <p style={{ color:BRAND.muted, fontSize:14, textAlign:"center", padding:"30px 0" }}>Aucun fichier trouvé.</p>}
+      </div>
+    </div>
+  );
+}
+
+// ─── Membres ───────────────────────────────────────────────────────────────────
+function Membres() {
+  return (
+    <div className="fade-up">
+      <h2 style={{ fontSize:20, fontWeight:700, color:BRAND.text, marginBottom:20 }}>Membres</h2>
+      <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
+        {MEMBRES.map((m, i) => (
+          <div key={i} style={{ background:BRAND.surface, borderRadius:13, border:`1px solid ${BRAND.border}`, padding:"16px 18px", display:"flex", alignItems:"center", gap:14 }}>
+            <div style={{ width:38, height:38, borderRadius:"50%", background:`${BRAND.teal}30`, display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
+              <span style={{ color:BRAND.tealLight, fontWeight:700, fontSize:15 }}>{m.nom[0]}</span>
+            </div>
+            <div style={{ flex:1 }}>
+              <div style={{ color:BRAND.text, fontWeight:600, fontSize:14 }}>{m.nom}</div>
+              <div style={{ color:BRAND.muted, fontSize:13 }}>{m.role}</div>
+              <a href={`mailto:${m.email}`} style={{ color:BRAND.teal, fontSize:12, textDecoration:"none" }}>{m.email}</a>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ─── Événements ────────────────────────────────────────────────────────────────
+function Evenements() {
+  const upcoming = EVENEMENTS_DATA.filter(e => e.statut === "À venir");
+  const past = EVENEMENTS_DATA.filter(e => e.statut === "Passé");
+
+  const Card = ({ ev }) => (
+    <div style={{ background:BRAND.surface, borderRadius:13, border:`1px solid ${BRAND.border}`, padding:"14px 18px", display:"flex", justifyContent:"space-between", alignItems:"center" }}>
+      <div>
+        <div style={{ color:BRAND.text, fontWeight:600, fontSize:14, marginBottom:3 }}>{ev.titre}</div>
+        <div style={{ color:BRAND.muted, fontSize:12 }}>{ev.type} · {new Date(ev.date).toLocaleDateString("fr-CA", { year:"numeric", month:"long", day:"numeric" })}</div>
+      </div>
+      <span style={{ fontSize:11, fontWeight:600, padding:"4px 10px", borderRadius:20, background: ev.statut==="À venir" ? `${BRAND.teal}25` : `${BRAND.faint}50`, color: ev.statut==="À venir" ? BRAND.tealLight : BRAND.muted }}>
+        {ev.statut}
+      </span>
+    </div>
+  );
+
+  return (
+    <div className="fade-up">
+      <h2 style={{ fontSize:20, fontWeight:700, color:BRAND.text, marginBottom:20 }}>Événements</h2>
+      {upcoming.length > 0 && (
+        <>
+          <p style={{ color:BRAND.muted, fontSize:12, fontWeight:600, textTransform:"uppercase", letterSpacing:"0.08em", marginBottom:10 }}>À venir</p>
+          <div style={{ display:"flex", flexDirection:"column", gap:8, marginBottom:22 }}>
+            {upcoming.map((ev, i) => <Card key={i} ev={ev} />)}
+          </div>
+        </>
+      )}
+      {past.length > 0 && (
+        <>
+          <p style={{ color:BRAND.muted, fontSize:12, fontWeight:600, textTransform:"uppercase", letterSpacing:"0.08em", marginBottom:10 }}>Passés</p>
+          <div style={{ display:"flex", flexDirection:"column", gap:8 }}>
+            {past.map((ev, i) => <Card key={i} ev={ev} />)}
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
+// ─── Ressources ────────────────────────────────────────────────────────────────
+const RESSOURCES = [
+  { titre:"Guide SOCAN / Re:Sound", desc:"Licences de diffusion musicale en salle", url:"https://www.socan.com/licences/" },
+  { titre:"Trousse opérationnelle – Spectacles", desc:"Checklist pré-show, technique, loge", url:"#" },
+  { titre:"Formulaire de demande de subvention", desc:"CALQ / Conseil des arts du Canada", url:"https://www.calq.gouv.qc.ca/" },
+  { titre:"Gabarit contrat d'artiste", desc:"Document de base à adapter selon la production", url:"#" },
+  { titre:"Petites créances – Palais de Justice d'Alma", desc:"Procédures et formulaires", url:"https://www.justice.gouv.qc.ca/tribunaux/cour-du-quebec/division-des-petites-creances/" },
+];
+
+function Ressources() {
+  return (
+    <div className="fade-up">
+      <h2 style={{ fontSize:20, fontWeight:700, color:BRAND.text, marginBottom:20 }}>Ressources</h2>
+      <div style={{ display:"flex", flexDirection:"column", gap:8 }}>
+        {RESSOURCES.map((r, i) => (
+          <a key={i} href={r.url} target="_blank" rel="noreferrer" style={{ textDecoration:"none" }}>
+            <div style={{ background:BRAND.surface, borderRadius:13, border:`1px solid ${BRAND.border}`, padding:"14px 18px", display:"flex", justifyContent:"space-between", alignItems:"center", gap:12 }}>
+              <div>
+                <div style={{ color:BRAND.text, fontWeight:600, fontSize:14, marginBottom:3 }}>{r.titre}</div>
+                <div style={{ color:BRAND.muted, fontSize:12 }}>{r.desc}</div>
+              </div>
+              <ExternalLink size={14} color={BRAND.faint} flexShrink={0} />
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ─── Accueil ───────────────────────────────────────────────────────────────────
+function Accueil({ setActive, accessToken, onSignIn, googleLoading }) {
+  const prochains = EVENEMENTS_DATA.filter(e => e.statut === "À venir").slice(0, 2);
+  return (
+    <div className="fade-up">
+      <div style={{ marginBottom:24 }}>
+        <h2 style={{ fontSize:22, fontWeight:700, color:BRAND.text, marginBottom:6 }}>Bonjour 👋</h2>
+        <p style={{ color:BRAND.muted, fontSize:14 }}>Tableau de bord – Comité de programmation</p>
+      </div>
+      {!accessToken && (
+        <div style={{ marginBottom:20 }}>
+          <ConnectBanner onSignIn={onSignIn} loading={googleLoading} />
+        </div>
+      )}
+      <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill, minmax(155px, 1fr))", gap:10, marginBottom:28 }}>
+        {CARDS.map(({ id, label, desc, Icon, color, bg }) => (
+          <button key={id} className="card" onClick={() => setActive(id)}
+            style={{ background:BRAND.surface, borderRadius:14, border:`1px solid ${BRAND.border}`, padding:"16px 14px", textAlign:"left", cursor:"pointer" }}>
+            <div style={{ width:34, height:34, borderRadius:10, background:bg, display:"flex", alignItems:"center", justifyContent:"center", marginBottom:11 }}>
+              <Icon size={17} color={color} />
+            </div>
+            <div style={{ color:BRAND.text, fontWeight:600, fontSize:14, marginBottom:3 }}>{label}</div>
+            <div style={{ color:BRAND.muted, fontSize:12 }}>{desc}</div>
+          </button>
+        ))}
+      </div>
+      {prochains.length > 0 && (
+        <>
+          <p style={{ color:BRAND.muted, fontSize:12, fontWeight:600, textTransform:"uppercase", letterSpacing:"0.08em", marginBottom:10 }}>Prochains spectacles</p>
+          <div style={{ display:"flex", flexDirection:"column", gap:8 }}>
+            {prochains.map((ev, i) => (
+              <div key={i} style={{ background:BRAND.surface, borderRadius:12, border:`1px solid ${BRAND.border}`, padding:"13px 16px", display:"flex", justifyContent:"space-between", alignItems:"center" }}>
+                <div>
+                  <div style={{ color:BRAND.text, fontWeight:600, fontSize:14 }}>{ev.titre}</div>
+                  <div style={{ color:BRAND.muted, fontSize:12 }}>{ev.type} · {new Date(ev.date).toLocaleDateString("fr-CA", { month:"long", day:"numeric" })}</div>
+                </div>
+                <span style={{ fontSize:11, fontWeight:600, padding:"3px 9px", borderRadius:20, background:`${BRAND.teal}25`, color:BRAND.tealLight }}>À venir</span>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
+// ─── App ───────────────────────────────────────────────────────────────────────
+export default function App() {
+  const [authed, setAuthed] = useState(() => sessionStorage.getItem("gm_authed") === "1");
+  const [active, setActive] = useState("accueil");
+  const [menuOpen, setMenuOpen] = useState(false);
+  const { accessToken, signIn, signOut, loading: googleLoading } = useGoogleAuth();
+
+  const handleLogin = () => { sessionStorage.setItem("gm_authed", "1"); setAuthed(true); };
+
+  if (!authed) return <LoginScreen onLogin={handleLogin} />;
+
+  const renderSection = () => {
+    switch (active) {
+      case "accueil":    return <Accueil setActive={setActive} accessToken={accessToken} onSignIn={signIn} googleLoading={googleLoading} />;
+      case "calendrier": return <Calendrier accessToken={accessToken} onSignIn={signIn} googleLoading={googleLoading} />;
+      case "evenements": return <Evenements />;
+      case "courriels":  return <Courriels accessToken={accessToken} onSignIn={signIn} googleLoading={googleLoading} />;
+      case "disque":     return <Disque accessToken={accessToken} onSignIn={signIn} googleLoading={googleLoading} />;
+      case "membres":    return <Membres />;
+      case "ressources": return <Ressources />;
+      default:           return null;
+    }
+  };
+
+  return (
+    <div style={{ minHeight:"100vh", background:BRAND.bg }}>
+      <style>{CSS}</style>
+      <Nav
+        active={active} setActive={setActive}
+        menuOpen={menuOpen} setMenuOpen={setMenuOpen}
+        accessToken={accessToken}
+        onGoogleSignIn={signIn} onGoogleSignOut={signOut}
+        googleLoading={googleLoading}
+      />
+      <main style={{ maxWidth:820, margin:"0 auto", padding:"80px 16px 40px" }}>
+        {renderSection()}
+      </main>
+    </div>
+  );
+}
