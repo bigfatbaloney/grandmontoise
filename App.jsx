@@ -4,7 +4,7 @@ import {
   Plus, Star, Trash2, Menu, X, Lock, LogIn, RefreshCw,
   ExternalLink, AlertCircle
 } from "lucide-react";
- 
+
 const APP_PASSWORD = "grandmontoise2026";
 const CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 const SCOPES = [
@@ -12,14 +12,14 @@ const SCOPES = [
   "https://www.googleapis.com/auth/calendar.readonly",
   "https://www.googleapis.com/auth/drive.readonly",
 ].join(" ");
- 
+
 const BRAND = {
   teal: "#1a6b82", tealLight: "#2a8ba6", tealDark: "#124f61",
   red: "#d63030", bg: "#0c1015", surface: "#131920", surface2: "#19222b",
   border: "#1e2a33", border2: "#243040", text: "#e8eef2",
   muted: "#6b8090", faint: "#3a4e5c",
 };
- 
+
 const NAV_ITEMS = [
   { id: "accueil",    label: "Accueil",    Icon: Home },
   { id: "calendrier", label: "Calendrier", Icon: Calendar },
@@ -29,7 +29,7 @@ const NAV_ITEMS = [
   { id: "membres",    label: "Membres",    Icon: Users },
   { id: "ressources", label: "Ressources", Icon: BookOpen },
 ];
- 
+
 const CARDS = [
   { id: "calendrier", label: "Calendrier",     desc: "Événements & spectacles", Icon: Calendar,   color: BRAND.teal,  bg: "rgba(26,107,130,0.18)" },
   { id: "evenements", label: "Événements",     desc: "Passés et à venir",       Icon: Drama,      color: BRAND.red,   bg: "rgba(214,48,48,0.14)" },
@@ -38,7 +38,7 @@ const CARDS = [
   { id: "membres",    label: "Membres",        desc: "Coordonnées",             Icon: Users,      color: "#c9873a",   bg: "rgba(201,135,58,0.14)" },
   { id: "ressources", label: "Ressources",     desc: "Documents & outils",      Icon: BookOpen,   color: "#8b6fc9",   bg: "rgba(139,111,201,0.14)" },
 ];
- 
+
 const EVENEMENTS_DATA = [
   { titre: "Ballet Synergie",                date: "2026-09-15", statut: "À venir", type: "Danse" },
   { titre: "Journée Vinyles",                date: "2026-06-21", statut: "À venir", type: "Musique" },
@@ -46,13 +46,13 @@ const EVENEMENTS_DATA = [
   { titre: "Lou-Adriane Cassidy",            date: "2026-03-14", statut: "Passé",   type: "Chanson" },
   { titre: "Olivier Simard – Classe à part", date: "2026-02-22", statut: "Passé",   type: "Magie" },
 ];
- 
+
 const MEMBRES = [
   { nom: "Stéphane",      role: "Programmation & promotion", email: "stephane@lagrandmontoise.ca" },
   { nom: "Marie",         role: "Coordination",              email: "marie@lagrandmontoise.ca" },
   { nom: "Jean-François", role: "Technique",                 email: "jf@lagrandmontoise.ca" },
 ];
- 
+
 const CSS = `
   @import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -82,7 +82,7 @@ const CSS = `
   @media (min-width: 640px) { .mobile-only { display: none !important; } }
   @media (max-width: 639px) { .desktop-only { display: none !important; } }
 `;
- 
+
 // ─── Google Auth ──────────────────────────────────────────────────────────────
 function useGoogleAuth() {
   const [accessToken, setAccessToken] = useState(() => sessionStorage.getItem("gm_gtoken") || null);
@@ -129,13 +129,7 @@ async function gFetch(url, token) {
   if (!res.ok) throw new Error(`Erreur ${res.status}`);
   return res.json();
 }
- 
-async function gFetch(url, token) {
-  const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
-  if (!res.ok) throw new Error(`Erreur ${res.status}`);
-  return res.json();
-}
- 
+
 // ─── LogoMark ─────────────────────────────────────────────────────────────────
 function LogoMark({ size = 30 }) {
   return (
@@ -146,7 +140,7 @@ function LogoMark({ size = 30 }) {
     </svg>
   );
 }
- 
+
 // ─── ConnectBanner ────────────────────────────────────────────────────────────
 function ConnectBanner({ onSignIn, loading }) {
   return (
@@ -167,7 +161,7 @@ function ConnectBanner({ onSignIn, loading }) {
     </div>
   );
 }
- 
+
 // ─── Login ────────────────────────────────────────────────────────────────────
 function LoginScreen({ onLogin }) {
   const [pwd, setPwd] = useState("");
@@ -207,7 +201,7 @@ function LoginScreen({ onLogin }) {
     </div>
   );
 }
- 
+
 // ─── Nav ──────────────────────────────────────────────────────────────────────
 function Nav({ active, setActive, menuOpen, setMenuOpen, accessToken, onGoogleSignIn, onGoogleSignOut, googleLoading }) {
   return (
@@ -253,14 +247,14 @@ function Nav({ active, setActive, menuOpen, setMenuOpen, accessToken, onGoogleSi
     </>
   );
 }
- 
+
 // ─── Courriels ────────────────────────────────────────────────────────────────
 function Courriels({ accessToken, onSignIn, googleLoading }) {
   const [emails, setEmails] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selected, setSelected] = useState(null);
   const [error, setError] = useState(null);
- 
+
   const load = useCallback(async () => {
     if (!accessToken) return;
     setLoading(true); setError(null);
@@ -277,11 +271,11 @@ function Courriels({ accessToken, onSignIn, googleLoading }) {
     } catch { setError("Impossible de charger les courriels. Le token est peut-être expiré."); }
     setLoading(false);
   }, [accessToken]);
- 
+
   useEffect(() => { load(); }, [load]);
- 
+
   if (!accessToken) return <div className="fade-up"><h2 style={{ fontSize:20, fontWeight:700, color:BRAND.text, marginBottom:20 }}>Courriels</h2><ConnectBanner onSignIn={onSignIn} loading={googleLoading} /></div>;
- 
+
   return (
     <div className="fade-up">
       <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:20 }}>
@@ -316,13 +310,13 @@ function Courriels({ accessToken, onSignIn, googleLoading }) {
     </div>
   );
 }
- 
+
 // ─── Calendrier ───────────────────────────────────────────────────────────────
 function Calendrier({ accessToken, onSignIn, googleLoading }) {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
- 
+
   const load = useCallback(async () => {
     if (!accessToken) return;
     setLoading(true); setError(null);
@@ -333,11 +327,11 @@ function Calendrier({ accessToken, onSignIn, googleLoading }) {
     } catch { setError("Impossible de charger le calendrier."); }
     setLoading(false);
   }, [accessToken]);
- 
+
   useEffect(() => { load(); }, [load]);
- 
+
   if (!accessToken) return <div className="fade-up"><h2 style={{ fontSize:20, fontWeight:700, color:BRAND.text, marginBottom:20 }}>Calendrier</h2><ConnectBanner onSignIn={onSignIn} loading={googleLoading} /></div>;
- 
+
   return (
     <div className="fade-up">
       <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:20 }}>
@@ -366,13 +360,13 @@ function Calendrier({ accessToken, onSignIn, googleLoading }) {
     </div>
   );
 }
- 
+
 // ─── Disque ───────────────────────────────────────────────────────────────────
 function Disque({ accessToken, onSignIn, googleLoading }) {
   const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
- 
+
   const load = useCallback(async () => {
     if (!accessToken) return;
     setLoading(true); setError(null);
@@ -382,9 +376,9 @@ function Disque({ accessToken, onSignIn, googleLoading }) {
     } catch { setError("Impossible de charger le disque."); }
     setLoading(false);
   }, [accessToken]);
- 
+
   useEffect(() => { load(); }, [load]);
- 
+
   const icon = (mime) => {
     if (mime?.includes("folder")) return "📁";
     if (mime?.includes("document")||mime?.includes("word")) return "📄";
@@ -394,9 +388,9 @@ function Disque({ accessToken, onSignIn, googleLoading }) {
     if (mime?.includes("image")) return "🖼️";
     return "📎";
   };
- 
+
   if (!accessToken) return <div className="fade-up"><h2 style={{ fontSize:20, fontWeight:700, color:BRAND.text, marginBottom:20 }}>Disque partagé</h2><ConnectBanner onSignIn={onSignIn} loading={googleLoading} /></div>;
- 
+
   return (
     <div className="fade-up">
       <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:20 }}>
@@ -425,13 +419,13 @@ function Disque({ accessToken, onSignIn, googleLoading }) {
     </div>
   );
 }
- 
+
 // ─── Accueil ──────────────────────────────────────────────────────────────────
 function Accueil({ setActive, notes, setNotes }) {
   const [newNote, setNewNote] = useState("");
   const [adding, setAdding] = useState(false);
   const addNote = () => { if (!newNote.trim()) return; setNotes([...notes, { id:Date.now(), text:newNote, starred:false }]); setNewNote(""); setAdding(false); };
- 
+
   return (
     <div>
       <div className="fade-up" style={{ marginBottom:26 }}>
@@ -488,7 +482,7 @@ function Accueil({ setActive, notes, setNotes }) {
     </div>
   );
 }
- 
+
 // ─── Événements ───────────────────────────────────────────────────────────────
 function Evenements() {
   const [filter, setFilter] = useState("Tous");
@@ -517,7 +511,7 @@ function Evenements() {
     </div>
   );
 }
- 
+
 // ─── Membres ──────────────────────────────────────────────────────────────────
 function Membres() {
   return (
@@ -541,7 +535,7 @@ function Membres() {
     </div>
   );
 }
- 
+
 // ─── Ressources ───────────────────────────────────────────────────────────────
 function Ressources() {
   return (
@@ -555,7 +549,7 @@ function Ressources() {
     </div>
   );
 }
- 
+
 // ─── App ──────────────────────────────────────────────────────────────────────
 export default function App() {
   const [loggedIn, setLoggedIn] = useState(() => { try { return sessionStorage.getItem("gm_auth")==="1"; } catch { return false; } });
@@ -563,7 +557,7 @@ export default function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [notes, setNotes] = useState([{ id:1, text:"Items à acquérir : Bouilloire, Pichets", starred:true }]);
   const { accessToken, signIn, signOut, loading: googleLoading } = useGoogleAuth();
- 
+
   useEffect(() => {
     if (document.getElementById("gsi-script")) return;
     const s = document.createElement("script");
@@ -572,13 +566,13 @@ export default function App() {
     s.async = true;
     document.head.appendChild(s);
   }, []);
- 
+
   const handleLogin = () => { try { sessionStorage.setItem("gm_auth","1"); } catch {} setLoggedIn(true); };
- 
+
   if (!loggedIn) return <LoginScreen onLogin={handleLogin} />;
- 
+
   const gProps = { accessToken, onSignIn: signIn, googleLoading };
- 
+
   const renderPage = () => {
     switch(active) {
       case "accueil":    return <Accueil setActive={setActive} notes={notes} setNotes={setNotes} />;
@@ -591,7 +585,7 @@ export default function App() {
       default: return null;
     }
   };
- 
+
   return (
     <div style={{ minHeight:"100vh", background:BRAND.bg }}>
       <style>{CSS}</style>
