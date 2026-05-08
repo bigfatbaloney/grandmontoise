@@ -87,9 +87,20 @@ const CSS = `
 function useGoogleAuth() {
   const [accessToken, setAccessToken] = useState(() => sessionStorage.getItem("gm_gtoken") || null);
   const [loading, setLoading] = useState(false);
- 
+  const [googleReady, setGoogleReady] = useState(false);
+
+  useEffect(() => {
+    const check = setInterval(() => {
+      if (window.google?.accounts?.oauth2) {
+        setGoogleReady(true);
+        clearInterval(check);
+      }
+    }, 200);
+    return () => clearInterval(check);
+  }, []);
+
   const signIn = useCallback(() => {
-    if (!window.google) return;
+    if (!window.google?.accounts?.oauth2) return;
     setLoading(true);
     const client = window.google.accounts.oauth2.initTokenClient({
       client_id: CLIENT_ID,
@@ -104,13 +115,19 @@ function useGoogleAuth() {
     });
     client.requestAccessToken();
   }, []);
- 
+
   const signOut = useCallback(() => {
     setAccessToken(null);
     sessionStorage.removeItem("gm_gtoken");
   }, []);
- 
-  return { accessToken, signIn, signOut, loading };
+
+  return { accessToken, signIn, signOut, loading, googleReady };
+}
+
+async function gFetch(url, token) {
+  const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
+  if (!res.ok) throw new Error(`Erreur ${res.status}`);
+  return res.json();
 }
  
 async function gFetch(url, token) {
