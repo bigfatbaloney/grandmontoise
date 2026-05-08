@@ -6,7 +6,7 @@ import {
 } from "lucide-react";
 
 const APP_PASSWORD = "grandmontoise2026";
-const CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+const CLIENT_ID = "1038299390746-jnhm03l05mgdb48eqobqu5cnunjllqkp.apps.googleusercontent.com";
 const SCOPES = [
   "https://www.googleapis.com/auth/gmail.readonly",
   "https://www.googleapis.com/auth/calendar.readonly",
